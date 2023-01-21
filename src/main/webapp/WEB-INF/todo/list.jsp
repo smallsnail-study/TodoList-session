@@ -7,7 +7,7 @@
 <body>
 <h1>Todo List</h1>
 
-<h2>${appname}</h2>
+<h2>${appName}</h2>
 <h2>${loginInfo}</h2>
 <h3>${loginInfo.mname}</h3>
 <ul>

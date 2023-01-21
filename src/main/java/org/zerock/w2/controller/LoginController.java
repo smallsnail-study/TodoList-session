@@ -55,6 +55,7 @@ public class LoginController extends HttpServlet {      // 로그인처리기능
             HttpSession session = req.getSession();
             session.setAttribute("loginInfo", memberDTO);
             resp.sendRedirect("/todo/list");
+
         } catch (Exception e) {
             resp.sendRedirect("/login?result=error");
         }
@@ -66,7 +67,7 @@ public class LoginController extends HttpServlet {      // 로그인처리기능
 
         session.setAttribute("loginInfo",str);  // 구성한 문자열을 HttpSession의 loginInfo이름을 이용해서 저장한다.
 
-        resp.sendRedirect("todo/list"); // 로그인이 처리된 후에는 목록페이지로 리다이렉트 */
+        resp.sendRedirect("todo/list"); // 로그인이 처리된 후에는 목록페이지로 리다이렉트
 
         try {   // 정상적으로 로그인 된 경우 Httpsession 을 이용해서 'loginInfo'이름으로 객체를 저장
             MemberDTO memberDTO = MemberService.INSTANCE.login(mid, mpw);
@@ -75,6 +76,6 @@ public class LoginController extends HttpServlet {      // 로그인처리기능
             resp.sendRedirect("todo/list");
         } catch (Exception e) { // 예외가 발생하는 경우 /login으로 이동(result 파라미터를 전달해서 문제발생을 같이 전달)
             resp.sendRedirect("login?result=error");
-        }
+        } */
     }
 }

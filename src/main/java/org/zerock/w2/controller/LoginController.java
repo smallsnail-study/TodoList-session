@@ -6,11 +6,9 @@ import org.zerock.w2.service.MemberService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
+import java.util.UUID;
 
 @WebServlet("/login")
 @Log4j2
@@ -31,6 +29,35 @@ public class LoginController extends HttpServlet {      // 로그인처리기능
         // 사용자의 mid와 mpw를 파라미터로 수집한다.
         String mid = req.getParameter("mid");
         String mpw = req.getParameter("mpw");
+
+        // 자동 로그인 처리
+        String auto = req.getParameter("auto");
+
+        boolean rememberMe = auto != null && auto.equals("on"); // auto라는 이름으로 체크박스에서 전송되는 값이 on인지 확인
+
+        try {
+            MemberDTO memberDTO = MemberService.INSTANCE.login(mid, mpw);
+
+            if (rememberMe) {   // rememberMe 변수가 true라면 java.util의 UUID를 이용해서 임의의 번호를 생성한다.
+                String uuid = UUID.randomUUID().toString();
+
+                MemberService.INSTANCE.updateUuid(mid, uuid);
+                memberDTO.setUuid(uuid);
+
+                // 브라우저에 remember-me 이름의 쿠키를 생성해서 전송
+                Cookie remeberCookie = new Cookie("remember-me", uuid);
+                remeberCookie.setMaxAge(60 * 60 * 24 * 7);  // 쿠키의 유효기간은 1주일
+                remeberCookie.setPath("/");
+
+                resp.addCookie(remeberCookie);
+            }
+
+            HttpSession session = req.getSession();
+            session.setAttribute("loginInfo", memberDTO);
+            resp.sendRedirect("/todo/list");
+        } catch (Exception e) {
+            resp.sendRedirect("/login?result=error");
+        }
 
         /*
         String str = mid+mpw;   // 수집한 mid와 mpw를 이용해서 문자열을 구성한다.

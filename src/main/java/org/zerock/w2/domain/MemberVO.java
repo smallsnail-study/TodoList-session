@@ -12,4 +12,5 @@ public class MemberVO {     // 자바에서 데이터베이스의 데이터를 �
     private String mid;
     private String mpw;
     private String mname;
+    private String uuid;
 }

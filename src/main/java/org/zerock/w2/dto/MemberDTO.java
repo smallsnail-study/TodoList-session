@@ -14,4 +14,5 @@ public class MemberDTO {        // 서비스게층과 컨트롤러에서 사용
     private String mid;
     private String mpw;
     private String mname;
+    private String uuid;
 }

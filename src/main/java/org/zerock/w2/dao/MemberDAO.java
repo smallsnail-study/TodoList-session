@@ -46,4 +46,27 @@ public class MemberDAO {    // 자바에서 데이터베이스의 데이터를 �
         preparedStatement.setString(2, mid);
         preparedStatement.executeUpdate();
     }
+
+    // 쿠키의 값을 이용해서 사용자의 정보를 로딩해 오는 기능
+    public MemberVO selectUUID(String uuid) throws Exception {
+
+        String query = "select mid, mpw, mname, uuid from tbl_member where uuid =?";
+
+        @Cleanup Connection connection = ConnectionUtil.INSTANCE.getConnection();
+        @Cleanup PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, uuid);
+
+        @Cleanup ResultSet resultSet = preparedStatement.executeQuery();
+
+        resultSet.next();
+
+        MemberVO memberVO = MemberVO.builder()
+                .mid(resultSet.getString(1))
+                .mpw(resultSet.getString(2))
+                .mname(resultSet.getString(3))
+                .uuid(resultSet.getNString(4))
+                .build();
+
+        return memberVO;
+    }
 }

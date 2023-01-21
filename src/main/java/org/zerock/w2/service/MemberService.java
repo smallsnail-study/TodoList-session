@@ -33,4 +33,14 @@ public enum MemberService {     // MemberDTO를 사용
     public void updateUuid(String mid, String uuid) throws Exception {
         dao.updateUuid(mid, uuid);
     }
+
+    // 쿠키의 값을 이용한 사용자 정보 조회
+    public MemberDTO getByUUID(String uuid) throws Exception {
+
+        MemberVO vo = dao.selectUUID(uuid);
+
+        MemberDTO memberDTO = modelMapper.map(vo, MemberDTO.class);
+
+        return memberDTO;
+    }
 }
